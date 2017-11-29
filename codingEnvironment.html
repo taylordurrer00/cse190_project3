@@ -1,0 +1,406 @@
+<script type="text/javascript" src="/blockly/blockly_compressed.js"></script>
+
+<script type="text/javascript" src="/blockly/blocks_compressed.js"></script>
+
+
+<script type="text/javascript" src="/blockly/javascript_compressed.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script type="text/javascript" src="/blockly/msg/js/en.js"></script>
+
+<script type="text/javascript" src="/blockly/blocks/customBlocks.js"></script>
+
+<script type='text/javascript'>
+
+    (function()
+    {
+        if( window.localStorage )
+        {
+            if( !localStorage.getItem('firstLoad') )
+            {
+                localStorage['firstLoad'] = true;
+                window.location.reload();
+            }
+            else
+                localStorage.removeItem('firstLoad');
+        }
+    })();
+
+</script>
+
+<div id="myModal" class="modal">
+    <img class="modal-content" id="img01">
+</div>
+
+<div style="margin-top:20px; margin-bottom:5px"><a href="mission1.html"><img src="/images/CodeBanner.png"/></a></div>
+<div style="background-color: #ededed;height:925px;margin-left:10px;margin-right:10px;">
+    <div style=" position:relative; margin-bottom:8px; text-align:center;">
+        <img src="/images/CodeHeader.png" />
+    </div>
+
+    <div id="blocklyDiv" style="height: 800px; margin-left: 10px; width: 49%; float: left; align:center;">
+    </div>
+
+    <div style="background-color: #FFFFFF; float: left; width: 49%; height: 800px">
+        <div style="height:53%;width:98%;outline-style: solid;outline-width: 1px;text-align:center;margin-left:5px;margin-top:5px;">
+            <div id="runButton" style="text-align:center;top:60%;width:45%;height:5%;z-index: 5; position:absolute">
+                <img onclick="runCode()" src="/images/runButton.png"/>
+            </div>
+            <div style="position:absolute;z-index:4;width:45%;height:37%">
+                <canvas id="alienAnimation"></canvas>
+            </div>
+            <div id="stopButton" style="visibility:hidden;position:absolute;margin-left:530px;margin-top:360px;">
+                <img onclick="stopCode()" src="/images/stopButton.png"/>
+            </div>
+        </div>
+        <hr>
+        <div style="overflow-y:auto; height:40%;">
+            <table >
+                <tr>
+                    <td>
+                        <img src="images/AlienNum1.png" style="margin-left:5px;margin-top:5px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                    <td>
+                        <img src="images/AlienNum2.png" style="margin-left:5px;margin-top:5px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                    <td>
+                        <img src="images/AlienNum3.png" style="margin-left:5px;margin-top:5px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="images/AlienNum4.png" style="margin-left:5px;margin-top:10px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                    <td>
+                        <img src="images/AlienNum5.png" style="margin-left:5px;margin-top:10px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                    <td>
+                        <img src="images/AlienNum6.png" style="margin-left:5px;margin-top:10px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="images/AlienNum7.png" style="margin-left:5px;margin-top:10px;margin-bottom:5px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                    <td>
+                        <img src="images/AlienNum8.png" style="margin-left:5px;margin-top:10px;margin-bottom:5px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                    <td>
+                        <img src="images/AlienNum9.png" style="margin-left:5px;margin-top:10px;margin-bottom:5px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div>
+        <img onclick="submitCode()" src="images/SubmitButton.png" style="margin-top:10px;margin-right:15px;float:right;" />
+        <img onclick="saveCode()" src="images/saveButton.png" style="margin-top:10px;margin-right:15px;float:right;" />
+    </div>
+</div>
+<div id="codeArea">
+
+</div>
+<div>
+    <img src="images/savedVersions.png" style="margin-top:10px;" />
+</div>
+
+
+<xml id="toolbox" style="display: none">
+    <category name="Events" colour="65">
+        <block type="whenrunclicked"></block>
+    </category>
+    <category name="Aliens" colour="175">
+        <block type="clearscreen"></block>
+        <block type="startalien"></block>
+        <block type="alienpose"></block>
+        <block type="movealien"></block>
+    </category>
+
+    <sep></sep>
+
+    <category name="Logic" colour="210">
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_boolean"></block>
+    </category>
+    <category name="Control" colour="120">
+        <block type="controls_if"></block>
+        <block type="controls_whileUntil"></block>
+        <block type="controls_for"></block>
+    </category>
+    <category name="Math" colour="230">
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
+    </category>
+    <category name="Text" colour="20">
+        <block type="text"></block>
+        <block type="text_print"></block>
+    </category>
+    <category name="Variables" colour="330" custom="VARIABLE">
+
+    </category>
+    <category name="Functions" colour="290" custom="PROCEDURE">
+
+    </category>
+</xml>
+<script>
+    var code = "";
+    /*******************************
+     * Setup the Blockly Interface *
+     *******************************/
+    var workspace = Blockly.inject('blocklyDiv',
+        {toolbox: document.getElementById('toolbox')});
+
+    /********************
+     * Setup the Canvas *
+     ********************/
+    var canvas = document.getElementById("alienAnimation");
+    canvas.width = 480;
+    canvas.height = 480;
+
+    var ctx = document.getElementById('alienAnimation').getContext('2d');
+
+    var animation = true;
+
+    /*********************
+     * Defining a Sprite *
+     *********************/
+    function sprite (spriteParams) {
+
+        var spriteObj = {};
+
+        spriteObj.context = spriteParams.context;
+        spriteObj.width = spriteParams.width;
+        spriteObj.height = spriteParams.height;
+        spriteObj.image = spriteParams.image;
+        spriteObj.x = spriteParams.x;
+        spriteObj.y = spriteParams.y;
+
+        spriteObj.render = function () {
+            // Draw the animation
+            spriteObj.context.drawImage(
+                spriteObj.image,
+                canvas.width / 2 - spriteObj.width / 2,
+                canvas.height / 2  - spriteObj.height / 2,
+                spriteObj.width,
+                spriteObj.height,
+                spriteObj.x,
+                spriteObj.y,
+                spriteObj.width,
+                spriteObj.height);
+        };
+
+        spriteObj.moveSprite = function (xParam, yParam) {
+            spriteObj.x += xParam;
+            spriteObj.y += yParam;
+        }
+
+        return spriteObj;
+    }
+
+    /**********************
+     * Defining the Alien *
+     **********************/
+    var alienImage = new Image();
+    alienImage.src = "images/MonsterTest1.png";
+
+    var alien1 = sprite({
+        context: canvas.getContext("2d"),
+        width: 500,
+        height: 500,
+        image: alienImage,
+        x: 0,
+        y: 0
+    });
+
+    /******************
+     * Show the alien *
+     ******************/
+    alien1.render();
+
+    /**************************************************************
+     * Refresh the page so the alien is always there on page load *
+     **************************************************************/
+    (function()
+    {
+        if( window.localStorage )
+        {
+            if( !localStorage.getItem('secondLoad') )
+            {
+                localStorage['secondLoad'] = true;
+                window.location.reload();
+            }
+            else
+                localStorage.removeItem('secondLoad');
+        }
+    })();
+
+    var indexToArrays = 0;
+    var numOfInstructions = 0;
+    var arrayOfPoses = [];
+    var arrayOfDirections = [];
+    var arrayOfDistances = [];
+
+    /**************************************
+     * RUN and STOP buttons on the canvas *
+     **************************************/
+    function runCode() {
+        code = Blockly.JavaScript.workspaceToCode(workspace);
+        document.getElementById('codeArea').innerHTML = 'This is the entire code: ' + code;
+        document.getElementById('runButton').style.visibility = 'hidden';
+        document.getElementById('stopButton').style.visibility = 'visible';
+        animation = true;
+
+        try {
+            eval(code);
+            console.log(arrayOfPoses);
+            console.log(arrayOfDirections);
+            console.log(arrayOfDistances);
+        } catch (e) {
+            alert(e);
+        }
+
+        window.requestAnimationFrame(animate);
+    }
+
+    function updatePose(poseNum){
+        arrayOfPoses.push(poseNum);
+        arrayOfDirections.push('up');
+        arrayOfDistances.push(0);
+        numOfInstructions++;
+    }
+
+    function updateMovement(direction, distance){
+        arrayOfDirections.push(direction);
+        arrayOfDistances.push(distance);
+        if(numOfInstructions == 0)
+            arrayOfPoses.push(1);
+        else
+            arrayOfPoses.push(arrayOfPoses[numOfInstructions-1]);
+        numOfInstructions++;
+    }
+
+    function animate() {
+        setTimeout(function() {
+            setAlienImage(arrayOfPoses[indexToArrays]);
+            moveAlien(arrayOfDirections[indexToArrays], arrayOfDistances[indexToArrays]);
+
+            indexToArrays++;
+
+            if (indexToArrays == numOfInstructions)
+                indexToArrays = 0;
+
+            if (animation) {
+                window.requestAnimationFrame(animate);
+            }
+        }, 1000);
+    }
+
+    function stopCode() {
+        document.getElementById('runButton').style.visibility = 'visible';
+        document.getElementById('stopButton').style.visibility = 'hidden';
+        animation = false;
+        //window.requestAnimationFrame(resetCanvas);
+        //resetCanvas();
+    }
+
+    function resetCanvas(){
+        clearCanvas();
+        setAlienImage(1);
+        moveAlienTo(0,0);
+    }
+
+    /******************************************
+     * Save button shows debug output of code *
+     ******************************************/
+    function saveCode() {
+        code = Blockly.JavaScript.workspaceToCode(workspace);
+        document.getElementById('codeArea').innerHTML = 'About to update the project with this code: ' + code;
+
+        /*
+        $.ajax ({
+            url: '/projects/update',
+            method: 'post',
+            parameters: { name: "Mission1", language: 'blockly', tags: ['mission'], file: code }
+        });*/
+    }
+
+    /************************************************
+     * Submit button checks code and shows Congrats *
+     ************************************************/
+    function submitCode() {
+        code = Blockly.JavaScript.workspaceToCode(workspace);
+
+        //if(code.indexOf("move") >= 0 && code.indexOf("Image") >= 0){
+            var modal = document.getElementById("myModal");
+
+            var modalImg = document.getElementById("img01");
+            modalImg.src = "images/LevelUp.png";
+
+            modal.style.display = "block";
+
+            modalImg.onclick = function() {
+                modal.style.display = "none";
+            }
+        //} else {
+            //document.getElementById('codeArea').innerHTML = "You need a move and change pose";
+        //}
+    }
+
+    /*************************************
+     * Keep the code variable up to date *
+     *************************************/
+    function myUpdateFunction(event) {
+        code = Blockly.JavaScript.workspaceToCode(workspace);
+    }
+
+    workspace.addChangeListener(myUpdateFunction);
+
+    /**********************************************************************************************
+     *                        CODE THAT GETS RUN BASED ON BLOCKLY BLOCKS                          *
+     **********************************************************************************************/
+
+    /*****************************
+     * Changing the Alien's Pose *
+     *****************************/
+    function setAlienImage(alienIndex){
+        clearCanvas();
+        alienImage.src = "images/MonsterTest"+alienIndex+".png";
+        ctx.drawImage(alien1.image, alien1.x, alien1.y);
+        ctx.save();
+        ctx.restore();
+    }
+
+    function moveAlienTo(x, y){
+        ctx.drawImage(alien1.image, x, y);
+        ctx.save();
+        ctx.restore();
+    }
+
+    /********************
+     * Moving the Alien *
+     ********************/
+    function moveAlien(direction, amount) {
+        if(direction == 'up'){
+            ctx.translate(0, 0-amount);
+        } else if(direction == 'down'){
+            ctx.translate(0, amount);
+        } else if(direction == 'left'){
+            ctx.translate(0-amount, 0);
+        } else if(direction == 'right'){
+            ctx.translate(amount, 0);
+        }
+        ctx.save();
+        ctx.restore();
+    }
+
+    /***********************
+     * Clearing the Canvas *
+     ***********************/
+    function clearCanvas(){
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.restore();
+    }
+
+</script>
