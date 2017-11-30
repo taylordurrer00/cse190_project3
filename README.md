@@ -3,7 +3,8 @@
 - Clone this project onto your machine  
   `git clone https://github.com/sguthals/blocklyplayground.git`
 - Update the Blockly Submodule  
-  `cd blocklyplayground`  
+  `cd blocklyplayground` 
+  `git submodule init`
   `git submodule update`
 - Open the file "codingEnvironment.html" in the browser of your choice and you should be able to make the cat change poses  
   `open codingEnvironment.html`
