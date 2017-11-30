@@ -13,13 +13,26 @@
 
 ### customBlocks.js
 
+## Useful Links
+[Blockly Block Generator](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html)  
+[Blockly Guides](https://developers.google.com/blockly/guides/overview)
+
 ## Requirements
 - [ ] Add a new character with at least 3 new poses in the character pane (10 pts)	
-- [ ] Add a new Blockly category for your new character with a changePose block (10 pts)	
-- [ ] Create a Sprite for your new character (10 pts)	
-- [ ] Add a function to change your new character's pose (10 pts)	
+- [ ] Add a new Blockly category for your new character with a changePose block (5 pts)	
+- [ ] Create a Sprite for your new character (5 pts)	
+- [ ] Add a function to change your new character's pose (5 pts)	
 - [ ] Ensure you can change poses of both characters - can be all in the same "Run" block (10 pts)	
+- [ ] Add a new Blockly block that displays a word on the screen. (15 pts)
 - [ ] EXTRA CREDIT: Add a move method to your characters (20 pts)
+
+You should at least have the following blocks in this nested order in your block chooser:  
+![Animals Category](https://github.com/sguthals/blocklyplayground/blob/master/Screen%20Shot%202017-11-30%20at%207.20.27%20AM.png?raw=true)  
+![Cat Category](https://github.com/sguthals/blocklyplayground/blob/master/Screen%20Shot%202017-11-30%20at%207.20.31%20AM.png?raw=true)  
+![Dog Category](https://github.com/sguthals/blocklyplayground/blob/master/Screen%20Shot%202017-11-30%20at%207.20.36%20AM.png?raw=true)  
+  
+And your program should perform as follows:  
+[![Project 3 Output](http://img.youtube.com/vi/mKgeLiYYOmc/0.jpg)](http://www.youtube.com/watch?v=mKgeLiYYOmc "Project 3 Output")
 
 ## Submission
 You can either:
