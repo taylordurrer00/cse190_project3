@@ -39,7 +39,7 @@ And your program should perform as follows:
 You can either:
 1. Create a branch of your code on GitHub and create a Pull Request with your changes.
 2. Fork the repo
-3. Submit the two files that you will be modifying (`codingEnvironment.html` and `customBlocks.js`)
+3. Submit the two files that you will be modifying (`codingEnvironment.html` and `customBlocks.js`)  
 Submit the URL or your files [here](https://docs.google.com/forms/d/e/1FAIpQLScC7-JDMhrbNFfZwVizocxHhDeCvA1dMr6Q4gdUho4uQFoQvQ/viewform)
 
 ## Deadline
