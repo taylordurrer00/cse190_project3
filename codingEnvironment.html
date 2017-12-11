@@ -79,6 +79,17 @@
                         <img src="images/cat3_numbered.png" style="margin-left:5px;margin-top:5px;outline-style: solid;outline-width: 1px;height:180px;" />
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <img src="images/dog1_numbered.png" style="margin-left:5px;margin-top:5px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                    <td>
+                        <img src="images/dog2_numbered.png" style="margin-left:5px;margin-top:5px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                    <td>
+                        <img src="images/dog3_numbered.png" style="margin-left:5px;margin-top:5px;outline-style: solid;outline-width: 1px;height:180px;" />
+                    </td>
+                </tr>
             </table>
         </div>
     </div>
@@ -97,8 +108,16 @@
         <block type="whenrunclicked"></block>
         <block type="clearscreen"></block>
     </category>
-    <category name="cats" colour="175">
-        <block type="catpose"></block>
+    <category name="animals" colour="175">
+        <block type="animalsay" colour="0"></block>
+        <category name="cats" colour="175">
+            <block type="catpose"></block>
+            <block type="catmove"></block>
+        </category>
+        <category name="dogs" colour="120">
+            <block type="dogpose"></block>
+            <block type="dogmove"></block>
+        </category>
     </category>
 
     <sep></sep>
@@ -178,9 +197,9 @@
         return spriteObj;
     }
 
-    /**********************
+    /********************
      * Defining the cat *
-     **********************/
+     ********************/
     var catImage = new Image();
     catImage.src = "images/cat1.png";
 
@@ -193,14 +212,46 @@
         y: 0
     });
 
-    /******************
+    /********************
+     * Defining the dog *
+     ********************/
+    var dogImage = new Image();
+    dogImage.src = "images/dog1.png";
+
+    var dog1 = sprite({
+        context: canvas.getContext("2d"),
+        width: 500,
+        height: 500,
+        image: dogImage,
+        x: 250,
+        y: 0
+    });
+
+    /****************
      * Show the cat *
-     ******************/
+     ****************/
     cat1.render();
 
-    var indexToArrays = 0;
-    var numOfInstructions = 0;
-    var arrayOfPoses = [];
+    var catIndexToArrays = 0;
+    var catNumOfInstructions = 0;
+    var catArrayOfPoses = [];
+
+    /****************
+     * Show the dog *
+     ****************/
+    dog1.render();
+
+    var dogIndexToArrays = 0;
+    var dogNumOfInstructions = 0;
+    var dogArrayOfPoses = [];
+
+    /*********************
+     * Defining the text *
+     *********************/
+    var textToSay = '';
+    var textPosX = 250;
+    var textPosY = 400;
+
 
     /**************************************
      * RUN and STOP buttons on the canvas *
@@ -216,6 +267,20 @@
           document.getElementById('codeArea').innerHTML += '<br>';
         }
         document.getElementById('codeArea').innerHTML += '}<br>';
+
+        // Make sure everything gets reset properly
+        catIndexToArrays = 0;
+        catNumOfInstructions = 0;
+        catArrayOfPoses = [];
+        dogIndexToArrays = 0;
+        dogNumOfInstructions = 0;
+        dogArrayOfPoses = [];
+        textToSay = '';
+        cat1.x = 0;
+        cat1.y = 0;
+        dog1.x = 250;
+        dog1.y = 0;
+        
         animation = true;
 
         try {
@@ -227,19 +292,49 @@
         window.requestAnimationFrame(animate);
     }
 
-    function updatePose(poseNum){
-        arrayOfPoses.push(poseNum);
-        numOfInstructions++;
+    function stopCode() {
+        animation = false;
+    }
+
+    function updateCatPose(poseNum){
+        catArrayOfPoses.push(poseNum);
+        catNumOfInstructions++;
+    }
+
+    function updateDogPose(poseNum){
+        dogArrayOfPoses.push(poseNum);
+        dogNumOfInstructions++;
+    }
+
+    function say(textInput){
+        textToSay = textInput;
+    }
+
+    function moveCat(dx, dy) {
+        cat1.x += dx;
+        cat1.y += dy;
+    }
+
+    function moveDog(dx, dy) {
+        dog1.x += dx;
+        dog1.y += dy;
     }
 
     function animate() {
         setTimeout(function() {
-            setcatImage(arrayOfPoses[indexToArrays]);
+            setImages(catArrayOfPoses[catIndexToArrays],
+                      dogArrayOfPoses[dogIndexToArrays]);
 
-            indexToArrays++;
+            drawText();
 
-            if (indexToArrays == numOfInstructions)
-                indexToArrays = 0;
+            catIndexToArrays++;
+            dogIndexToArrays++;
+
+            if (catIndexToArrays == catNumOfInstructions)
+                catIndexToArrays = 0;
+
+            if (dogIndexToArrays == dogNumOfInstructions)
+                dogIndexToArrays = 0;
 
             if (animation) {
                 window.requestAnimationFrame(animate);
@@ -247,13 +342,34 @@
         }, 1000);
     }
 
-    function stopCode() {
-        animation = false;
+    /**********************************
+     * Changing the dog and cat poses *
+     **********************************/
+    function setImages(catIndex, dogIndex) {
+        if (!catIndex)
+            catIndex = 1;
+
+        if (!dogIndex)
+            dogIndex = 1;
+
+        catImage.src = "images/cat"+catIndex+".png";
+        dogImage.src = "images/dog"+dogIndex+".png";
+
+        clearCanvas();
+        ctx.drawImage(cat1.image, cat1.x, cat1.y);
+        ctx.drawImage(dog1.image, dog1.x, dog1.y);
+        ctx.save();
+        ctx.restore();
+    }
+
+    function drawText() {
+        ctx.font = '40px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(textToSay, textPosX, textPosY);
     }
 
     function resetCanvas(){
-        clearCanvas();
-        setcatImage(1);
+        setImages(1, 1);
     }
 
     /*************************************
@@ -265,22 +381,9 @@
 
     workspace.addChangeListener(myUpdateFunction);
 
-    /**********************************************************************************************
-     *                        CODE THAT GETS RUN BASED ON BLOCKLY BLOCKS                          *
-     **********************************************************************************************/
-
-    /*****************************
-     * Changing the cat's Pose *
-     *****************************/
-    function setcatImage(catIndex){
-        if(!catIndex)
-          catIndex = 1;
-        clearCanvas();
-        catImage.src = "images/cat"+catIndex+".png";
-        ctx.drawImage(cat1.image, cat1.x, cat1.y);
-        ctx.save();
-        ctx.restore();
-    }
+    /************************************************************************
+     *              CODE THAT GETS RUN BASED ON BLOCKLY BLOCKS              *
+     ************************************************************************/
 
     /***********************
      * Clearing the Canvas *
